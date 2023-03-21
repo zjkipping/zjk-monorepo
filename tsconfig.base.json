@@ -23,6 +23,9 @@
       ],
       "@zjk/ani-watching/feature-app": [
         "libs/ani-watching/feature-app/src/index.ts"
+      ],
+      "@zjk/ani-watching/feature-dashboard": [
+        "libs/ani-watching/feature-dashboard/src/index.ts"
       ]
     }
   },

@@ -4,7 +4,7 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',
+    redirectTo: 'dashboard',
   },
   {
     path: 'login',
@@ -14,11 +14,14 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
       ),
   },
   {
-    path: 'home',
-    loadComponent: () => import(''),
+    path: 'dashboard',
+    loadComponent: () =>
+      import('@zjk/ani-watching/feature-dashboard').then(
+        (m) => m.AniWatchingFeatureDashboardComponent,
+      ),
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'dashboard',
   },
 ];

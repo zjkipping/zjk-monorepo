@@ -8,7 +8,10 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
   },
   {
     path: 'login',
-    loadComponent: () => import(''),
+    loadComponent: () =>
+      import('@zjk/ani-list/feature-login').then(
+        (m) => m.AniListFeatureLoginComponent,
+      ),
   },
   {
     path: 'home',

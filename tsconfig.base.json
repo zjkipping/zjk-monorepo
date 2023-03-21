@@ -21,6 +21,9 @@
       "@zjk/ani-list/feature-login": [
         "libs/ani-list/feature-login/src/index.ts"
       ],
+      "@zjk/ani-list/feature-login-redirect": [
+        "libs/ani-list/feature-login-redirect/src/index.ts"
+      ],
       "@zjk/ani-list/util-environment": [
         "libs/ani-list/util-environment/src/index.ts"
       ],

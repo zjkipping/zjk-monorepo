@@ -1,5 +1,7 @@
 import { Route } from '@angular/router';
 
+import { setLoginRedirectData } from '@zjk/ani-list/feature-login-redirect';
+
 export const aniWatchingFeatureAppRoutes: Route[] = [
   {
     path: '',
@@ -12,6 +14,14 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
       import('@zjk/ani-list/feature-login').then(
         (m) => m.AniListFeatureLoginComponent,
       ),
+  },
+  {
+    path: 'login-redirect',
+    loadComponent: () =>
+      import('@zjk/ani-list/feature-login-redirect').then(
+        (m) => m.AniListFeatureLoginRedirectComponent,
+      ),
+    data: setLoginRedirectData({ redirectTo: 'dashboard' }),
   },
   {
     path: 'dashboard',

@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@zjk/ani-list/data-access-auth": [
+        "libs/ani-list/data-access-auth/src/index.ts"
+      ],
       "@zjk/ani-list/feature-login": [
         "libs/ani-list/feature-login/src/index.ts"
       ],

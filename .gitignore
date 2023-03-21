@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+apps/**/environments/environment.*.ts
+!apps/**/environments/environment.*.sample.ts
+
 # compiled output
 dist
 tmp

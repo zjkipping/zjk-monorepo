@@ -8,6 +8,9 @@ import {
   AniWatchingFeatureAppComponent,
   aniWatchingFeatureAppRoutes,
 } from '@zjk/ani-watching/feature-app';
+import { provideEnvironment } from '@zjk/infrastructure/util-environment';
+
+import { environment } from './environments/environment';
 
 bootstrapApplication(AniWatchingFeatureAppComponent, {
   providers: [
@@ -15,5 +18,6 @@ bootstrapApplication(AniWatchingFeatureAppComponent, {
       aniWatchingFeatureAppRoutes,
       withEnabledBlockingInitialNavigation(),
     ),
+    provideEnvironment(environment),
   ],
 }).catch((err) => console.error(err));

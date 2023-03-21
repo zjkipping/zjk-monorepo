@@ -27,6 +27,9 @@
       "@zjk/ani-list/data-access-http-interceptor": [
         "libs/ani-list/data-access-http-interceptor/src/index.ts"
       ],
+      "@zjk/ani-list/data-access-user-info": [
+        "libs/ani-list/data-access-user-info/src/index.ts"
+      ],
       "@zjk/ani-list/feature-login": [
         "libs/ani-list/feature-login/src/index.ts"
       ],

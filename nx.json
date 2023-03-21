@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "ani-watching",
+  "npmScope": "zjk",
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
@@ -21,7 +21,11 @@
       "inputs": ["default", "^production"]
     },
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json", "{workspaceRoot}/.eslintignore"]
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore"
+      ]
     }
   },
   "namedInputs": {
@@ -40,11 +44,14 @@
       "style": "scss",
       "linter": "eslint",
       "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
+      "e2eTestRunner": "cypress",
+      "standalone": true
     },
     "@nrwl/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "jest",
+      "style": "scss",
+      "standalone": true
     },
     "@nrwl/angular:component": {
       "style": "scss"

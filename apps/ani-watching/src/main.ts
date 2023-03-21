@@ -4,6 +4,7 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 
+import { provideAniListAuthHttpInterceptor } from '@zjk/ani-list/data-access-http-interceptor';
 import {
   AniWatchingFeatureAppComponent,
   aniWatchingFeatureAppRoutes,
@@ -19,5 +20,6 @@ bootstrapApplication(AniWatchingFeatureAppComponent, {
       withEnabledBlockingInitialNavigation(),
     ),
     provideEnvironment(environment),
+    provideAniListAuthHttpInterceptor(),
   ],
 }).catch((err) => console.error(err));

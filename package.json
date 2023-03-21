@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "nx": "nx"
   },
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "nx": "15.8.7",
     "@nrwl/workspace": "15.8.7",

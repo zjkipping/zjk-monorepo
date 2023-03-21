@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { AniListAuthGuard } from '@zjk/ani-list/data-access-auth-guard';
 import { setLoginRedirectData } from '@zjk/ani-list/feature-login-redirect';
 
 export const aniWatchingFeatureAppRoutes: Route[] = [
@@ -25,6 +26,7 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
   },
   {
     path: 'dashboard',
+    canMatch: [AniListAuthGuard('login')],
     loadComponent: () =>
       import('@zjk/ani-watching/feature-dashboard').then(
         (m) => m.AniWatchingFeatureDashboardComponent,

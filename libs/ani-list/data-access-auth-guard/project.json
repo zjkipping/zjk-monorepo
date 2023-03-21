@@ -1,0 +1,34 @@
+{
+  "name": "ani-list-data-access-auth-guard",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/ani-list/data-access-auth-guard/src",
+  "prefix": "zjk",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/ani-list/data-access-auth-guard/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ani-list/data-access-auth-guard/**/*.ts",
+          "libs/ani-list/data-access-auth-guard/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": ["type:data-access"]
+}

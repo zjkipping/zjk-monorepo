@@ -1,11 +1,11 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 
-import { provideAniListAuthHttpInterceptor } from '@zjk/ani-list/data-access-http-interceptor';
+import { AniListAuthHttpInterceptor } from '@zjk/ani-list/data-access-http-interceptor';
 import {
   AniWatchingFeatureAppComponent,
   aniWatchingFeatureAppRoutes,
@@ -16,12 +16,11 @@ import { environment } from './environments/environment';
 
 bootstrapApplication(AniWatchingFeatureAppComponent, {
   providers: [
+    provideHttpClient(withInterceptors([AniListAuthHttpInterceptor])),
+    provideEnvironment(environment),
     provideRouter(
       aniWatchingFeatureAppRoutes,
       withEnabledBlockingInitialNavigation(),
     ),
-    provideHttpClient(),
-    provideEnvironment(environment),
-    provideAniListAuthHttpInterceptor(),
   ],
 }).catch((err) => console.error(err));

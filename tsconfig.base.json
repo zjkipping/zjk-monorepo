@@ -18,6 +18,9 @@
       "@zjk/ani-list/data-access-auth": [
         "libs/ani-list/data-access-auth/src/index.ts"
       ],
+      "@zjk/ani-list/data-access-auth-guard": [
+        "libs/ani-list/data-access-auth-guard/src/index.ts"
+      ],
       "@zjk/ani-list/data-access-graphql-api": [
         "libs/ani-list/data-access-graphql-api/src/index.ts"
       ],

@@ -15,7 +15,10 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/ani-watching/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/ani-watching/src/favicon.ico", "apps/ani-watching/src/assets"],
+        "assets": [
+          "apps/ani-watching/src/favicon.ico",
+          "apps/ani-watching/src/assets"
+        ],
         "styles": ["apps/ani-watching/src/styles.scss"],
         "scripts": []
       },
@@ -68,7 +71,10 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/ani-watching/**/*.ts", "apps/ani-watching/**/*.html"]
+        "lintFilePatterns": [
+          "apps/ani-watching/**/*.ts",
+          "apps/ani-watching/**/*.html"
+        ]
       }
     },
     "test": {
@@ -86,5 +92,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["type:feature"]
 }

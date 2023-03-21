@@ -29,6 +29,9 @@
       ],
       "@zjk/ani-watching/feature-dashboard": [
         "libs/ani-watching/feature-dashboard/src/index.ts"
+      ],
+      "@zjk/infrastructure/util-environment": [
+        "libs/infrastructure/util-environment/src/index.ts"
       ]
     }
   },

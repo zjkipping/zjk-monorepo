@@ -1,6 +1,19 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
+import {
+  provideRouter,
+  withEnabledBlockingInitialNavigation,
+} from '@angular/router';
 
-bootstrapApplication(AppComponent, {
-  providers: [provideRouter(appRoutes, withEnabledBlockingInitialNavigation())],
+import {
+  AniWatchingFeatureAppComponent,
+  aniWatchingFeatureAppRoutes,
+} from '@zjk/ani-watching/feature-app';
+
+bootstrapApplication(AniWatchingFeatureAppComponent, {
+  providers: [
+    provideRouter(
+      aniWatchingFeatureAppRoutes,
+      withEnabledBlockingInitialNavigation(),
+    ),
+  ],
 }).catch((err) => console.error(err));

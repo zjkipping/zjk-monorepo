@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@zjk/ani-watching/feature-app": [
+        "libs/ani-watching/feature-app/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

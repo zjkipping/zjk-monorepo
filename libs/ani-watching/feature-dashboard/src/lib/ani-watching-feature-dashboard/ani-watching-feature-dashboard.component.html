@@ -9,14 +9,18 @@
       ⟳
     </button>
   </div>
-  <div class="nav-user-display">
+  <a
+    class="nav-user-display"
+    [href]="(userInfo | async)?.siteUrl"
+    target="_blank"
+  >
     <span class="user-name">{{ (userInfo | async)?.name }}</span>
     <img
       class="user-avatar"
       [src]="(userInfo | async)?.avatar?.large"
       alt="user's avatar"
     />
-  </div>
+  </a>
 </nav>
 <main
   class="ani-watching-main-content"
@@ -33,7 +37,7 @@
           *ngIf="hasPlannedMediaNowAiring | async"
           routerLink="airing-planned-shows"
         >
-          Some of your planned shows are airing!
+          !
         </a>
       </div>
       <zjk-ani-watching-ui-media-list-display

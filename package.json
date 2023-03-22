@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "nx": "nx"
+    "nx": "nx",
+    "start:ani-watching": "nx serve ani-watching",
+    "prep:ani-watching-prod": "node tools/scripts/setup-ani-watching-production-environment.js",
+    "build:ani-watching": "nx build ani-watching"
   },
   "private": true,
   "dependencies": {

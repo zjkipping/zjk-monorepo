@@ -42,11 +42,15 @@
       "@zjk/ani-list/util-environment": [
         "libs/ani-list/util-environment/src/index.ts"
       ],
+      "@zjk/ani-list/util-types": ["libs/ani-list/util-types/src/index.ts"],
       "@zjk/ani-watching/feature-app": [
         "libs/ani-watching/feature-app/src/index.ts"
       ],
       "@zjk/ani-watching/feature-dashboard": [
         "libs/ani-watching/feature-dashboard/src/index.ts"
+      ],
+      "@zjk/ani-watching/ui-media-list-display": [
+        "libs/ani-watching/ui-media-list-display/src/index.ts"
       ],
       "@zjk/infrastructure/util-environment": [
         "libs/infrastructure/util-environment/src/index.ts"

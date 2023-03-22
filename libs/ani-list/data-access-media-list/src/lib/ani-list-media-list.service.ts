@@ -15,23 +15,26 @@ import {
 
 import { AniListGraphQLApiService } from '@zjk/ani-list/data-access-graphql-api';
 import { AniListUserInfoService } from '@zjk/ani-list/data-access-user-info';
+import { AniListMedia, AniListMediaListStatus } from '@zjk/ani-list/util-types';
 
 import {
   PaginatedMediaListQuery,
   paginatedMediaListQuery,
   updateEpisodeProgressQuery,
 } from './graphql-queries';
-import { Media, MediaListStatus } from './types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AniListMediaListService {
-  currentlyWatching: Observable<Media[] | null>;
-  planningToWatch: Observable<Media[] | null>;
+  currentlyWatching: Observable<AniListMedia[] | null>;
+  planningToWatch: Observable<AniListMedia[] | null>;
 
   private _refreshCurrentlyWatching = new Subject<void>();
   private _refreshPlanningToWatch = new Subject<void>();
+
+  private _silentRefreshCurrentlyWatching = new Subject<void>();
+  private _silentRefreshPlanningToWatch = new Subject<void>();
 
   constructor(
     private aniListGraphQLApiService: AniListGraphQLApiService,
@@ -44,10 +47,15 @@ export class AniListMediaListService {
           switchMap(() =>
             merge(
               of(null),
-              this.getAllMediaListPages(userInfo.id, [
-                MediaListStatus.CURRENT,
-                MediaListStatus.REPEATING,
-              ]),
+              this._silentRefreshCurrentlyWatching.pipe(
+                startWith(null),
+                switchMap(() =>
+                  this.getAllMediaListPages(userInfo.id, [
+                    AniListMediaListStatus.CURRENT,
+                    AniListMediaListStatus.REPEATING,
+                  ]),
+                ),
+              ),
             ),
           ),
         ),
@@ -62,9 +70,14 @@ export class AniListMediaListService {
           switchMap(() =>
             merge(
               of(null),
-              this.getAllMediaListPages(userInfo.id, [
-                MediaListStatus.PLANNING,
-              ]),
+              this._silentRefreshPlanningToWatch.pipe(
+                startWith(null),
+                switchMap(() =>
+                  this.getAllMediaListPages(userInfo.id, [
+                    AniListMediaListStatus.PLANNING,
+                  ]),
+                ),
+              ),
             ),
           ),
         ),
@@ -75,7 +88,7 @@ export class AniListMediaListService {
 
   private getAllMediaListPages(
     userId: number,
-    mediaListStatuses: MediaListStatus[],
+    mediaListStatuses: AniListMediaListStatus[],
   ) {
     return this.fetchMediaListPage(1, userId, mediaListStatuses).pipe(
       expand((response) =>
@@ -95,7 +108,7 @@ export class AniListMediaListService {
             ...mediaListItem.media,
           })),
         ],
-        [] as Media[],
+        [] as AniListMedia[],
       ),
     );
   }
@@ -103,7 +116,7 @@ export class AniListMediaListService {
   private fetchMediaListPage(
     pageNumber: number,
     userId: number,
-    mediaListStatuses: MediaListStatus[],
+    mediaListStatuses: AniListMediaListStatus[],
   ) {
     return this.aniListGraphQLApiService.sendQuery<PaginatedMediaListQuery>(
       paginatedMediaListQuery,
@@ -121,6 +134,14 @@ export class AniListMediaListService {
 
   refreshPlanningToWatch() {
     this._refreshPlanningToWatch.next();
+  }
+
+  silentRefreshCurrentlyWatching() {
+    this._silentRefreshCurrentlyWatching.next();
+  }
+
+  silentRefreshPlanningToWatch() {
+    this._silentRefreshPlanningToWatch.next();
   }
 
   async updateEpisodeProgress(mediaListId: number, newProgress: number) {

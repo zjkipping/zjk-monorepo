@@ -1,4 +1,5 @@
 @import '../tokens.scss';
+
 zjk-ani-watching-feature-dashboard {
   display: grid;
   height: 100%;
@@ -51,83 +52,32 @@ zjk-ani-watching-feature-dashboard {
       grid-template-rows: max-content 1fr;
       row-gap: 1rem;
 
+      div.section-header {
+        display: grid;
+        grid-template-columns: max-content max-content;
+        place-items: center;
+        column-gap: 0.5rem;
+      }
+
+      a.airing-planned-shows {
+        display: grid;
+        grid-template-columns: max-content max-content;
+        column-gap: 0.25rem;
+        place-items: center;
+
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        margin-top: 10px;
+        background: $primary-accent;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+
       h2 {
         width: max-content;
         border-bottom: 2px solid $primary-blue;
         margin: 0;
-      }
-
-      div.media-list-display {
-        height: 100%;
-        display: grid;
-        place-items: center;
-
-        grid-template-columns: repeat(auto-fit, 150px);
-        grid-template-rows: repeat(auto-fit, 190px);
-        column-gap: 1rem;
-        row-gap: 1rem;
-        place-items: center;
-
-        div.media-item {
-          background-size: cover;
-          width: 150px;
-          height: 190px;
-          border-radius: 5px;
-          display: grid;
-          align-content: end;
-          grid-template-columns: 1fr;
-          position: relative;
-
-          div.behind-amount {
-            position: absolute;
-            top: -0.5rem;
-            right: -0.5rem;
-            width: max-content;
-            padding: 0 0.25rem;
-            display: grid;
-            place-items: center;
-            font-size: 16px;
-            font-weight: bold;
-
-            background: $primary-blue;
-            color: white;
-            border-radius: 25%;
-            z-index: 4;
-          }
-
-          div.media-info {
-            display: grid;
-            place-items: center;
-            background-color: rgba(39, 39, 39, 0.8);
-            width: 100%;
-
-            color: white;
-            position: relative;
-
-            div.next-episode {
-              width: 100%;
-              text-align: center;
-              border-bottom: 2px solid $primary-blue;
-            }
-
-            button.increase-progress-button,
-            button.decrease-progress-button {
-              position: absolute;
-              font-size: 25px;
-              bottom: -2px;
-              font-weight: bold;
-              color: $primary-accent;
-            }
-
-            button.increase-progress-button {
-              right: 5px;
-            }
-
-            button.decrease-progress-button {
-              left: 5px;
-            }
-          }
-        }
       }
     }
   }

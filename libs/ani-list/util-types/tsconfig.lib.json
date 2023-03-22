@@ -13,8 +13,5 @@
     "jest.config.ts",
     "src/**/*.test.ts"
   ],
-  "include": [
-    "src/**/*.ts",
-    "../ui-media-list-display/src/lib/ani-watching-ui-media-list-display/time-until.pipe.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }

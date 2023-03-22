@@ -1,36 +1,42 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Observable, filter, map } from 'rxjs';
 
-import {
-  AniListMediaListService,
-  Media,
-  MediaStatus,
-} from '@zjk/ani-list/data-access-media-list';
+import { AniListMediaListService } from '@zjk/ani-list/data-access-media-list';
+import { AniListUserInfoService } from '@zjk/ani-list/data-access-user-info';
 import {
   AniListUserInfo,
-  AniListUserInfoService,
-} from '@zjk/ani-list/data-access-user-info';
-
-import { TimeUntilPipe } from './time-until.pipe';
+  AniListMedia,
+  AniListMediaStatus,
+} from '@zjk/ani-list/util-types';
+import { AniWatchingUiMediaListDisplayComponent } from '@zjk/ani-watching/ui-media-list-display';
 
 @Component({
   selector: 'zjk-ani-watching-feature-dashboard',
   standalone: true,
-  imports: [CommonModule, TimeUntilPipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AniWatchingUiMediaListDisplayComponent,
+    RouterLink,
+  ],
   templateUrl: './ani-watching-feature-dashboard.component.html',
   styleUrls: ['./ani-watching-feature-dashboard.component.scss'],
 })
 export class AniWatchingFeatureDashboardComponent {
   userInfo: Observable<AniListUserInfo>;
-  airingMediaList: Observable<Media[]>;
-  finishedAiringMediaList: Observable<Media[]>;
+  airingMediaList: Observable<AniListMedia[]>;
+  finishedAiringMediaList: Observable<AniListMedia[]>;
+  plannedNowAiringMediaList: Observable<AniListMedia[]>;
+  hasPlannedMediaNowAiring: Observable<boolean>;
   isLoadingWatching: Observable<boolean>;
   isLoadingPlanning: Observable<boolean>;
 
   constructor(
-    userInfoService: AniListUserInfoService,
     private mediaListService: AniListMediaListService,
+    userInfoService: AniListUserInfoService,
   ) {
     this.userInfo = userInfoService.userInfo;
     this.isLoadingWatching = mediaListService.currentlyWatching.pipe(
@@ -41,16 +47,18 @@ export class AniWatchingFeatureDashboardComponent {
     );
 
     const loadedMediaList = mediaListService.currentlyWatching.pipe(
-      filter((mediaList): mediaList is Media[] => !!mediaList),
+      filter((mediaList): mediaList is AniListMedia[] => !!mediaList),
     );
 
     this.airingMediaList = loadedMediaList.pipe(
       map((mediaList) =>
         mediaList
-          .filter((mediaItem) => mediaItem.status === MediaStatus.RELEASING)
+          .filter(
+            (mediaItem) => mediaItem.status === AniListMediaStatus.RELEASING,
+          )
           .sort((a, b) => {
-            const aTime = a.nextAiringEpisode.timeUntilAiring;
-            const bTime = b.nextAiringEpisode.timeUntilAiring;
+            const aTime = a.nextAiringEpisode?.timeUntilAiring as number;
+            const bTime = b.nextAiringEpisode?.timeUntilAiring as number;
             if (aTime > bTime) {
               return 1;
             } else if (aTime < bTime) {
@@ -65,7 +73,9 @@ export class AniWatchingFeatureDashboardComponent {
     this.finishedAiringMediaList = loadedMediaList.pipe(
       map((mediaList) =>
         mediaList
-          .filter((mediaItem) => mediaItem.status === MediaStatus.FINISHED)
+          .filter(
+            (mediaItem) => mediaItem.status === AniListMediaStatus.FINISHED,
+          )
           .sort((a, b) => {
             const aDate = new Date();
             aDate.setFullYear(a.endDate.year);
@@ -85,31 +95,45 @@ export class AniWatchingFeatureDashboardComponent {
           }),
       ),
     );
+
+    this.plannedNowAiringMediaList = mediaListService.planningToWatch.pipe(
+      filter((mediaList): mediaList is AniListMedia[] => !!mediaList),
+      map((mediaList) =>
+        mediaList.filter(
+          (mediaItem) => mediaItem.status === AniListMediaStatus.RELEASING,
+        ),
+      ),
+    );
+
+    this.hasPlannedMediaNowAiring = this.plannedNowAiringMediaList.pipe(
+      map((mediaList) => mediaList.length > 0),
+    );
   }
 
   refresh() {
     this.mediaListService.refreshCurrentlyWatching();
+    this.mediaListService.refreshPlanningToWatch();
   }
 
-  async increaseEpisodeProgress(media: Media) {
+  async increaseEpisodeProgress(media: AniListMedia) {
     const newProgress = media.progress + 1;
     if (newProgress <= media.episodes) {
       await this.mediaListService.updateEpisodeProgress(
         media.mediaListId,
         newProgress,
       );
-      this.mediaListService.refreshCurrentlyWatching();
+      this.mediaListService.silentRefreshCurrentlyWatching();
     }
   }
 
-  async decreaseEpisodeProgress(media: Media) {
+  async decreaseEpisodeProgress(media: AniListMedia) {
     const newProgress = media.progress - 1;
     if (newProgress >= 0) {
       await this.mediaListService.updateEpisodeProgress(
         media.mediaListId,
         newProgress,
       );
-      this.mediaListService.refreshCurrentlyWatching();
+      this.mediaListService.silentRefreshCurrentlyWatching();
     }
   }
 }

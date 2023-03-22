@@ -1,30 +1,4 @@
-import { MediaStatus } from './types';
-
-export interface RawMedia {
-  id: number;
-  title: {
-    userPreferred: string;
-  };
-  status: MediaStatus;
-  episodes: number;
-  coverImage: {
-    large: string;
-  };
-  nextAiringEpisode: {
-    timeUntilAiring: number;
-    episode: number;
-  };
-  externalLinks: {
-    url: string;
-    site: string;
-    icon: string;
-  };
-  endDate: {
-    year: number;
-    month: number;
-    day: number;
-  };
-}
+import { AniListRawMedia } from '@zjk/ani-list/util-types';
 
 export interface PaginatedMediaListQuery {
   Page: {
@@ -35,7 +9,7 @@ export interface PaginatedMediaListQuery {
     mediaList: {
       id: number;
       progress: number;
-      media: RawMedia;
+      media: AniListRawMedia;
     }[];
   };
 }
@@ -73,7 +47,8 @@ query ($userId: Int, $pageNumber: Int, $mediaListStatuses: [MediaListStatus]) {
           year,
           month,
           day
-        }
+        },
+        siteUrl
     	}
     }
   }

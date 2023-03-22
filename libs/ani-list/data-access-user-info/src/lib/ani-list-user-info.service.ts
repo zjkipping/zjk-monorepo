@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, map, shareReplay } from 'rxjs';
 
 import { AniListGraphQLApiService } from '@zjk/ani-list/data-access-graphql-api';
+import { AniListUserInfo } from '@zjk/ani-list/util-types';
 
 const userInfoQuery = `
 query {
@@ -20,17 +21,6 @@ query {
 
 interface AniListUserInfoQuery {
   Viewer: AniListUserInfo;
-}
-
-export interface AniListUserInfo {
-  id: number;
-  name: string;
-  avatar: {
-    large: string;
-    medium: string;
-  };
-  bannerImage: string;
-  siteUrl: string;
 }
 
 @Injectable({

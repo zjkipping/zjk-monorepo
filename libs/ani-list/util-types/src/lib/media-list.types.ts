@@ -33,7 +33,8 @@ export interface AniListRawMedia {
     url: string;
     site: string;
     icon: string;
-  };
+    color: string;
+  }[];
   endDate: {
     year: number;
     month: number;

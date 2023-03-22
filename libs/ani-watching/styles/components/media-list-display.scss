@@ -20,6 +20,30 @@ zjk-ani-watching-ui-media-list-display {
       grid-template-columns: 1fr;
       position: relative;
 
+      div.streaming-links {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: rgba(39, 39, 39, 0.8);
+        display: flex;
+        border-top-left-radius: 4px;
+        overflow: hidden;
+
+        a.streaming-link {
+          text-decoration: none;
+          height: 1.25rem;
+          width: 1.25rem;
+          display: grid;
+          place-items: center;
+          padding: 4px;
+
+          img.streaming-link-icon {
+            height: 100%;
+            width: 100%;
+          }
+        }
+      }
+
       a.anilist-link {
         text-decoration: none;
         height: 100%;

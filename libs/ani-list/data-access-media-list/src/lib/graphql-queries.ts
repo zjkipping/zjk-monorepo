@@ -41,7 +41,8 @@ query ($userId: Int, $pageNumber: Int, $mediaListStatuses: [MediaListStatus]) {
         externalLinks {
           url,
           site,
-          icon
+          icon,
+          color
         },
         endDate {
           year,

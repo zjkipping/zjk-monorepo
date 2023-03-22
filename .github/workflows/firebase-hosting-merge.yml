@@ -7,14 +7,15 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-  build_and_deploy:
+  build_and_deploy_ani_watching:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run:
-          npm ci && npm run prep:ani-watching-prod && npm run build:ani-watching
+      - run: npm ci
+      - run: npm run prep:ani-watching-prod
         env:
           ANI_LIST_CLIENT_ID: ${{secrets.ani_list_client_id}}
+      - run: npm run build:ani-watching
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

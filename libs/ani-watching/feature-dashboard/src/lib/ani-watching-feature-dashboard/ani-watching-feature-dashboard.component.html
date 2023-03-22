@@ -1,4 +1,7 @@
-<nav class="ani-watching-nav">
+<nav
+  class="ani-watching-nav"
+  [style.background-image]="'url(' + (userInfo | async)?.bannerImage + ')'"
+>
   <div class="nav-header">
     <h1>AniWatching</h1>
     <button

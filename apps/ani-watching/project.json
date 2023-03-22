@@ -19,7 +19,10 @@
           "apps/ani-watching/src/favicon.ico",
           "apps/ani-watching/src/assets"
         ],
-        "styles": ["apps/ani-watching/src/styles.scss"],
+        "styles": [
+          "apps/ani-watching/src/styles.scss",
+          "libs/ani-watching/styles/ani-watching.scss"
+        ],
         "scripts": []
       },
       "configurations": {

@@ -8,6 +8,9 @@ import {
   startWith,
   switchMap,
   takeWhile,
+  firstValueFrom,
+  of,
+  merge,
 } from 'rxjs';
 
 import { AniListGraphQLApiService } from '@zjk/ani-list/data-access-graphql-api';
@@ -16,6 +19,7 @@ import { AniListUserInfoService } from '@zjk/ani-list/data-access-user-info';
 import {
   PaginatedMediaListQuery,
   paginatedMediaListQuery,
+  updateEpisodeProgressQuery,
 } from './graphql-queries';
 import { Media, MediaListStatus } from './types';
 
@@ -23,8 +27,8 @@ import { Media, MediaListStatus } from './types';
   providedIn: 'root',
 })
 export class AniListMediaListService {
-  currentlyWatching: Observable<Media[]>;
-  planningToWatch: Observable<Media[]>;
+  currentlyWatching: Observable<Media[] | null>;
+  planningToWatch: Observable<Media[] | null>;
 
   private _refreshCurrentlyWatching = new Subject<void>();
   private _refreshPlanningToWatch = new Subject<void>();
@@ -38,10 +42,13 @@ export class AniListMediaListService {
         this._refreshCurrentlyWatching.pipe(
           startWith(null),
           switchMap(() =>
-            this.getAllMediaListPages(userInfo.id, [
-              MediaListStatus.CURRENT,
-              MediaListStatus.REPEATING,
-            ]),
+            merge(
+              of(null),
+              this.getAllMediaListPages(userInfo.id, [
+                MediaListStatus.CURRENT,
+                MediaListStatus.REPEATING,
+              ]),
+            ),
           ),
         ),
       ),
@@ -53,7 +60,12 @@ export class AniListMediaListService {
         this._refreshPlanningToWatch.pipe(
           startWith(null),
           switchMap(() =>
-            this.getAllMediaListPages(userInfo.id, [MediaListStatus.PLANNING]),
+            merge(
+              of(null),
+              this.getAllMediaListPages(userInfo.id, [
+                MediaListStatus.PLANNING,
+              ]),
+            ),
           ),
         ),
       ),
@@ -109,5 +121,17 @@ export class AniListMediaListService {
 
   refreshPlanningToWatch() {
     this._refreshPlanningToWatch.next();
+  }
+
+  async updateEpisodeProgress(mediaListId: number, newProgress: number) {
+    return firstValueFrom(
+      this.aniListGraphQLApiService.sendQuery<void>(
+        updateEpisodeProgressQuery,
+        {
+          mediaListId,
+          progress: newProgress,
+        },
+      ),
+    );
   }
 }

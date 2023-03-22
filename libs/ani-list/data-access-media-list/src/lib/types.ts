@@ -1,3 +1,5 @@
+import { RawMedia } from './graphql-queries';
+
 export enum MediaListStatus {
   CURRENT = 'CURRENT',
   PLANNING = 'PLANNING',
@@ -15,35 +17,8 @@ export enum MediaStatus {
   HIATUS = 'HIATUS',
 }
 
-export interface Media {
-  // These first two are technically from the MediaListItem
+export interface Media extends RawMedia {
+  // These two are merged from the MediaListItem
   mediaListId: number;
   progress: number;
-
-  // The rest are from the Media itself
-  id: number;
-  title: {
-    userPreferred: string;
-  };
-  status: MediaStatus;
-  episodes: number;
-  coverImage: {
-    extraLarge: string;
-    large: string;
-    medium: string;
-  };
-  nextAiringEpisode: {
-    timeUntilAiring: number;
-  };
-  externalLinks: {
-    url: string;
-    site: string;
-    icon: string;
-  };
-  streamingEpisodes: {
-    title: string;
-    thumbnail: string;
-    url: string;
-    site: string;
-  };
 }

@@ -1,5 +1,31 @@
 import { MediaStatus } from './types';
 
+export interface RawMedia {
+  id: number;
+  title: {
+    userPreferred: string;
+  };
+  status: MediaStatus;
+  episodes: number;
+  coverImage: {
+    large: string;
+  };
+  nextAiringEpisode: {
+    timeUntilAiring: number;
+    episode: number;
+  };
+  externalLinks: {
+    url: string;
+    site: string;
+    icon: string;
+  };
+  endDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+}
+
 export interface PaginatedMediaListQuery {
   Page: {
     pageInfo: {
@@ -9,33 +35,7 @@ export interface PaginatedMediaListQuery {
     mediaList: {
       id: number;
       progress: number;
-      media: {
-        id: number;
-        title: {
-          userPreferred: string;
-        };
-        status: MediaStatus;
-        episodes: number;
-        coverImage: {
-          extraLarge: string;
-          large: string;
-          medium: string;
-        };
-        nextAiringEpisode: {
-          timeUntilAiring: number;
-        };
-        externalLinks: {
-          url: string;
-          site: string;
-          icon: string;
-        };
-        streamingEpisodes: {
-          title: string;
-          thumbnail: string;
-          url: string;
-          site: string;
-        };
-      };
+      media: RawMedia;
     }[];
   };
 }
@@ -58,26 +58,33 @@ query ($userId: Int, $pageNumber: Int, $mediaListStatuses: [MediaListStatus]) {
         status,
         episodes,
         coverImage {
-          extraLarge
           large
-          medium
         },
         nextAiringEpisode {
-          timeUntilAiring
+          timeUntilAiring,
+          episode
         },
         externalLinks {
           url,
           site,
           icon
         },
-        streamingEpisodes {
-          title,
-          thumbnail,
-          url,
-          site,
+        endDate {
+          year,
+          month,
+          day
         }
     	}
     }
+  }
+}
+`;
+
+export const updateEpisodeProgressQuery = `
+mutation ($mediaListId: Int, $progress: Int) {
+  SaveMediaListEntry (id: $mediaListId, progress: $progress) {
+    id
+    progress
   }
 }
 `;

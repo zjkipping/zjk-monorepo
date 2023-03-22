@@ -1,7 +1,102 @@
-<p>ani-watching-feature-dashboard works!</p>
-
-<pre>{{ userInfo | async | json }}</pre>
-
-<pre>{{ currentlyWatchingList | async | json }}</pre>
-
-<pre>{{ planningToWatchList | async | json }}</pre>
+<nav class="ani-watching-nav">
+  <div class="nav-header">
+    <h1>AniWatching</h1>
+    <button
+      class="basic-button refresh-button"
+      (click)="refresh()"
+      [disabled]="(isLoadingWatching | async) || (isLoadingPlanning | async)"
+    >
+      &#10227;
+    </button>
+  </div>
+  <div class="nav-user-display">
+    <span class="user-name">{{ (userInfo | async)?.name }}</span>
+    <img
+      class="user-avatar"
+      [src]="(userInfo | async)?.avatar?.large"
+      alt="user's avatar"
+    />
+  </div>
+</nav>
+<main
+  class="ani-watching-main-content"
+  [class.not-loading]="(isLoadingWatching | async) === false"
+>
+  <ng-container
+    *ngIf="(isLoadingWatching | async) === false; else loadingSpinner"
+  >
+    <section class="ani-watching-section">
+      <h2>Currently Airing</h2>
+      <div class="media-list-display">
+        <div
+          class="media-item"
+          *ngFor="let mediaItem of airingMediaList | async"
+          [style.background-image]="'url(' + mediaItem.coverImage.large + ')'"
+          [attr.title]="mediaItem.title.userPreferred"
+        >
+          <div
+            class="behind-amount"
+            *ngIf="
+              mediaItem.nextAiringEpisode.episode - 1 - mediaItem.progress > 0
+            "
+          >
+            {{ mediaItem.nextAiringEpisode.episode - 1 - mediaItem.progress }}
+          </div>
+          <div class="media-info">
+            <div class="next-episode">
+              {{ mediaItem.nextAiringEpisode.timeUntilAiring | timeUntil }}
+            </div>
+            <div class="progress">
+              <span>{{ mediaItem.progress }} / {{ mediaItem.episodes }}</span>
+            </div>
+            <button
+              class="basic-button decrease-progress-button"
+              (click)="decreaseEpisodeProgress(mediaItem)"
+            >
+              -
+            </button>
+            <button
+              class="basic-button increase-progress-button"
+              (click)="increaseEpisodeProgress(mediaItem)"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="ani-watching-section">
+      <h2>Finished Airing</h2>
+      <div class="media-list-display">
+        <div
+          class="media-item"
+          *ngFor="let mediaItem of finishedAiringMediaList | async"
+          [style.background-image]="'url(' + mediaItem.coverImage.large + ')'"
+        >
+          <div class="media-info">
+            <div class="progress">
+              <span>{{ mediaItem.progress }} / {{ mediaItem.episodes }}</span>
+              <button
+                class="basic-button decrease-progress-button"
+                (click)="decreaseEpisodeProgress(mediaItem)"
+              >
+                -
+              </button>
+              <button
+                class="basic-button increase-progress-button"
+                (click)="increaseEpisodeProgress(mediaItem)"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+  <ng-template #loadingSpinner>
+    <div class="loading-spinner-container">
+      <div class="loading-spinner"></div>
+    </div>
+  </ng-template>
+</main>

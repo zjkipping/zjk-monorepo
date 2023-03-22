@@ -25,7 +25,10 @@ interface AniListUserInfoQuery {
 export interface AniListUserInfo {
   id: number;
   name: string;
-  avatar: string;
+  avatar: {
+    large: string;
+    medium: string;
+  };
   bannerImage: string;
   siteUrl: string;
 }

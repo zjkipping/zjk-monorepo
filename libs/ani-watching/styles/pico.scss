@@ -1,0 +1,16 @@
+@import url('https://unpkg.com/@picocss/pico@1.*/css/pico.min.css');
+
+button {
+  margin-bottom: 0;
+
+  &.basic-button {
+    width: max-content;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    color: white;
+    box-shadow: none;
+    transition: none;
+  }
+}

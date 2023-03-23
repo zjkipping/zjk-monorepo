@@ -15,7 +15,7 @@ jobs:
       - run: npm ci
       - id: get_affected
         run: |
-          AFFECTED_APPS=$(npm run nx print-affected -- --type='app' --select='projects' --base='origin/main~1' --head='origin/${{ github.head_ref || github.ref_name }}')
+          AFFECTED_APPS=$(npm run nx print-affected -- --type='app' --select='projects' --base='origin/main~1' --head='origin/${{ github.head_ref || github.ref_name }}' | tr '\n' ' ')
           echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
 
   build_and_preview_ani_watching:

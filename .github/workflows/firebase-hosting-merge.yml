@@ -18,7 +18,7 @@ jobs:
       - run: npm ci
       - id: get_affected
         run: |
-          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'origin/main~1' 'origin/main')
+          AFFECTED_APPS=$(npm run nx print-affected -- --type='app' --select='projects' --base='origin/${{ github.sha }}~1' --head='origin/${{ github.sha }}')
           echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
 
   build_and_deploy_ani_watching:

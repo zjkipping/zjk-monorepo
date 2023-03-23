@@ -7,6 +7,5 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './ani-watching-feature-app.component.html',
-  styleUrls: ['./ani-watching-feature-app.component.scss'],
 })
 export class AniWatchingFeatureAppComponent {}

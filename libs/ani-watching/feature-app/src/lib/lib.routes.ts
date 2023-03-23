@@ -10,13 +10,6 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
     redirectTo: 'dashboard',
   },
   {
-    path: 'login',
-    loadComponent: () =>
-      import('@zjk/ani-list/feature-login').then(
-        (m) => m.AniListFeatureLoginComponent,
-      ),
-  },
-  {
     path: 'login-redirect',
     loadComponent: () =>
       import('@zjk/ani-list/feature-login-redirect').then(
@@ -26,7 +19,7 @@ export const aniWatchingFeatureAppRoutes: Route[] = [
   },
   {
     path: 'dashboard',
-    canMatch: [AniListAuthGuard('login')],
+    canMatch: [AniListAuthGuard],
     loadComponent: () =>
       import('@zjk/ani-watching/feature-dashboard').then(
         (m) => m.AniWatchingFeatureDashboardComponent,

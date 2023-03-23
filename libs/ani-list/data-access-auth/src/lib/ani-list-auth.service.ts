@@ -29,11 +29,10 @@ export class AniListAuthService {
 
   login() {
     const clientId = this.es.environment.aniListClientId;
-    const loginUrl = new URL(
-      `/api/v2/oauth/authorize?client_id=${clientId}&response_type=token`,
-      'https://anilist.co',
-    );
-    this.document.location = loginUrl.toString();
+    const loginUrl = new URL('https://anilist.co/api/v2/oauth/authorize');
+    loginUrl.searchParams.append('client_id', clientId);
+    loginUrl.searchParams.append('response_type', 'token');
+    this.document.location = loginUrl.href;
   }
 
   consumeRedirectToken(redirectTo: string) {

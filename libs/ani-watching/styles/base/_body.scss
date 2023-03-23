@@ -1,0 +1,19 @@
+body {
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+
+  background: #11191f;
+  color: white;
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+  background-repeat: no-repeat;
+}
+
+:root {
+  color-scheme: dark;
+}

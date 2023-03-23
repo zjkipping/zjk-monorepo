@@ -24,10 +24,12 @@ zjk-ani-watching-ui-media-list-display {
         position: absolute;
         top: 0;
         left: 0;
-        background: rgba(39, 39, 39, 0.8);
         display: flex;
         border-top-left-radius: 4px;
         overflow: hidden;
+        -webkit-box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.75);
+        box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.75);
 
         a.streaming-link {
           text-decoration: none;
@@ -61,13 +63,17 @@ zjk-ani-watching-ui-media-list-display {
         padding: 0 0.25rem;
         display: grid;
         place-items: center;
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: bold;
 
         background: $primary-blue;
         color: white;
         border-radius: 25%;
         z-index: 4;
+
+        -webkit-box-shadow: -3px 3px 4px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: -3px 3px 4px 0px rgba(0, 0, 0, 0.75);
+        box-shadow: -3px 3px 4px 0px rgba(0, 0, 0, 0.75);
       }
 
       div.media-info {
@@ -88,21 +94,26 @@ zjk-ani-watching-ui-media-list-display {
           border-bottom: 2px solid $primary-blue;
         }
 
+        .progress-episode-separator {
+          margin: 0 3px;
+        }
+
         button.increase-progress-button,
         button.decrease-progress-button {
           position: absolute;
           font-size: 25px;
-          bottom: -2px;
           font-weight: bold;
           color: $primary-accent;
         }
 
         button.increase-progress-button {
           right: 5px;
+          bottom: -3px;
         }
 
         button.decrease-progress-button {
           left: 5px;
+          bottom: -2px;
         }
       }
     }

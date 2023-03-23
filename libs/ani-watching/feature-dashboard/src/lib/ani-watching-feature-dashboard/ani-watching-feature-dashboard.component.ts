@@ -23,7 +23,6 @@ import { AniWatchingUiMediaListDisplayComponent } from '@zjk/ani-watching/ui-med
     RouterLink,
   ],
   templateUrl: './ani-watching-feature-dashboard.component.html',
-  styleUrls: ['./ani-watching-feature-dashboard.component.scss'],
 })
 export class AniWatchingFeatureDashboardComponent {
   userInfo: Observable<AniListUserInfo>;

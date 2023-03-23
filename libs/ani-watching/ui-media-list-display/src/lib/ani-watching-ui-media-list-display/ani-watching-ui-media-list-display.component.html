@@ -37,7 +37,9 @@
         {{ mediaItem.nextAiringEpisode.timeUntilAiring | timeUntil }}
       </div>
       <div class="progress">
-        <span>{{ mediaItem.progress }} / {{ mediaItem.episodes }}</span>
+        <span>{{ mediaItem.progress }}</span>
+        <span class="progress-episode-separator">/</span>
+        <span>{{ mediaItem.episodes }}</span>
       </div>
       <button
         class="basic-button decrease-progress-button"

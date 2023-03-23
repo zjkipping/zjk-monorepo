@@ -10,7 +10,6 @@ import { TimeUntilPipe } from './time-until.pipe';
   standalone: true,
   imports: [CommonModule, TimeUntilPipe],
   templateUrl: './ani-watching-ui-media-list-display.component.html',
-  styleUrls: ['./ani-watching-ui-media-list-display.component.scss'],
 })
 export class AniWatchingUiMediaListDisplayComponent {
   @Input() mediaList: AniListMedia[] = [];

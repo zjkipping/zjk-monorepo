@@ -1,4 +1,4 @@
-@import '../tokens.scss';
+@import '../utility/tokens';
 
 zjk-ani-watching-feature-dashboard {
   display: grid;
@@ -22,24 +22,6 @@ zjk-ani-watching-feature-dashboard {
       height: 100%;
       display: grid;
       place-items: center;
-
-      div.loading-spinner {
-        border: 0.9rem solid rgba(76, 76, 76, 0.25);
-        border-top: 0.9rem solid $primary-blue;
-        border-radius: 50%;
-        width: 10rem;
-        height: 10rem;
-        animation: spin 1s linear infinite;
-
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
-      }
     }
 
     section.ani-watching-section {
@@ -63,12 +45,10 @@ zjk-ani-watching-feature-dashboard {
         text-decoration: none;
         color: black;
         font-weight: bold;
-        margin-top: 10px;
         font-size: 1.5rem;
         background: $primary-accent;
         border-radius: 5px;
         padding: 6px;
-        padding-bottom: 8px;
         line-height: 1rem;
       }
 
@@ -76,6 +56,7 @@ zjk-ani-watching-feature-dashboard {
         width: max-content;
         border-bottom: 2px solid $primary-blue;
         margin: 0;
+        padding-bottom: 3px;
       }
     }
   }

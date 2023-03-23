@@ -54,7 +54,8 @@
       "standalone": true
     },
     "@nrwl/angular:component": {
-      "style": "scss"
+      "style": "scss",
+      "standalone": true
     }
   }
 }

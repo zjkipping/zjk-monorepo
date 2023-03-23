@@ -21,7 +21,7 @@
         ],
         "styles": [
           "apps/ani-watching/src/styles.scss",
-          "libs/ani-watching/styles/ani-watching.scss"
+          "libs/ani-watching/styles/main.scss"
         ],
         "scripts": []
       },

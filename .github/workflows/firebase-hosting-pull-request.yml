@@ -4,7 +4,7 @@
 name: Deploy to Firebase Hosting on PR
 'on': pull_request
 jobs:
-get_affected_apps:
+  get_affected_apps:
     runs-on: ubuntu-latest
     outputs:
       affected_apps: ${{ steps.get_affected.outputs.AFFECTED_APPS }}
@@ -17,7 +17,9 @@ get_affected_apps:
           echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
 
   build_and_preview_ani_watching:
-    if: github.event.pull_request.head.repo.full_name == github.repository && contains(needs.get_affected_apps.outputs.affected_apps, 'ani-watching')
+    if:
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(needs.get_affected_apps.outputs.affected_apps, 'ani-watching')
     runs-on: ubuntu-latest
     needs: get_affected_apps
     steps:

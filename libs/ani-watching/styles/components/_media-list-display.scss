@@ -92,6 +92,16 @@ zjk-ani-watching-ui-media-list-display {
           width: 100%;
           text-align: center;
           border-bottom: 2px solid $primary-blue;
+          padding: 0.1rem 0;
+        }
+
+        .progress {
+          display: grid;
+          width: 100%;
+          grid-template-columns: max-content max-content max-content;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.1rem 0;
         }
 
         .progress-episode-separator {
@@ -100,20 +110,15 @@ zjk-ani-watching-ui-media-list-display {
 
         button.increase-progress-button,
         button.decrease-progress-button {
-          position: absolute;
           font-size: 25px;
           font-weight: bold;
           color: $primary-accent;
-        }
-
-        button.increase-progress-button {
-          right: 5px;
-          bottom: -3px;
+          margin: 0 5px;
+          line-height: 15px;
         }
 
         button.decrease-progress-button {
-          left: 5px;
-          bottom: -2px;
+          padding-bottom: 3px;
         }
       }
     }

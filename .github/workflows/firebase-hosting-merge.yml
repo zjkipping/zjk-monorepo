@@ -13,6 +13,8 @@ jobs:
       affected_apps: ${{ steps.get_affected.outputs.AFFECTED_APPS }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - run: npm ci
       - id: get_affected
         run: |

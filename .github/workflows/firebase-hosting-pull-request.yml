@@ -10,10 +10,12 @@ jobs:
       affected_apps: ${{ steps.get_affected.outputs.AFFECTED_APPS }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - run: npm ci
       - id: get_affected
         run: |
-          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'origin/main' '${{ github.sha }}')
+          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'origin/main' 'origin/${{ github.head_ref || github.ref_name }} ')
           echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
 
   build_and_preview_ani_watching:

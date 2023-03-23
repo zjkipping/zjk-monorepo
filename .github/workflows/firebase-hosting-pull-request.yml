@@ -13,7 +13,7 @@ jobs:
       - run: npm ci
       - id: get_affected
         run: |
-          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'main' '${{ github.sha }}')
+          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'origin/main' '${{ github.sha }}')
           echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
 
   build_and_preview_ani_watching:

@@ -4,16 +4,29 @@
 name: Deploy to Firebase Hosting on PR
 'on': pull_request
 jobs:
-  build_and_preview:
-    if:
-      '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+get_affected_apps:
     runs-on: ubuntu-latest
+    outputs:
+      affected_apps: ${{ steps.get_affected.outputs.AFFECTED_APPS }}
     steps:
       - uses: actions/checkout@v3
-      - run:
-          npm ci && npm run prep:ani-watching-prod && npm run build:ani-watching
+      - run: npm ci
+      - id: get_affected
+        run: |
+          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'main' '${{ github.sha }}')
+          echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
+
+  build_and_preview_ani_watching:
+    if: github.event.pull_request.head.repo.full_name == github.repository && contains(needs.get_affected_apps.outputs.affected_apps, 'ani-watching')
+    runs-on: ubuntu-latest
+    needs: get_affected_apps
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - run: npm run prep:ani-watching-prod
         env:
           ANI_LIST_CLIENT_ID: ${{secrets.ani_list_client_id}}
+      - run: npm run build:ani-watching
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

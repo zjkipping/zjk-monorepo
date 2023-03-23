@@ -7,8 +7,22 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
+  get_affected_apps:
+    runs-on: ubuntu-latest
+    outputs:
+      affected_apps: ${{ steps.get_affected.outputs.AFFECTED_APPS }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - id: get_affected
+        run: |
+          AFFECTED_APPS=$(node ./tools/scripts/get-affected-apps.js 'main~1' 'main')
+          echo "AFFECTED_APPS=$AFFECTED_APPS" >> "$GITHUB_OUTPUT"
+
   build_and_deploy_ani_watching:
     runs-on: ubuntu-latest
+    needs: get_affected_apps
+    if: contains(needs.get_affected_apps.outputs.affected_apps, 'ani-watching')
     steps:
       - uses: actions/checkout@v3
       - run: npm ci

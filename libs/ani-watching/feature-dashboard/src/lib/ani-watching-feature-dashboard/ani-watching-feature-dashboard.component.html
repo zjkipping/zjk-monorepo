@@ -10,16 +10,13 @@
     </button>
   </div>
   <a
+    *ngIf="userInfo | async as user"
     class="nav-user-display"
-    [href]="(userInfo | async)?.siteUrl"
+    [href]="user.siteUrl"
     target="_blank"
   >
-    <span class="user-name">{{ (userInfo | async)?.name }}</span>
-    <img
-      class="user-avatar"
-      [src]="(userInfo | async)?.avatar?.large"
-      alt="user's avatar"
-    />
+    <span class="user-name">{{ user.name }}</span>
+    <img class="user-avatar" [src]="user.avatar.large" alt="user's avatar" />
   </a>
 </nav>
 <main

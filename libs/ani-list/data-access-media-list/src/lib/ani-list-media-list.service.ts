@@ -81,11 +81,20 @@ export class AniListMediaListService {
       const index = mediaList.findIndex(
         (mediaItem) => mediaItem.mediaListId === mediaListId,
       );
-      const updatedMediaList: AniListMedia[] = [
-        ...mediaList.slice(0, index),
-        { ...mediaList[index], progress: newProgress },
-        ...mediaList.slice(index + 1),
-      ];
+      let updatedMediaList: AniListMedia[] = [];
+      const oldItem = mediaList[index];
+      if (newProgress === oldItem.episodes) {
+        updatedMediaList = [
+          ...mediaList.slice(0, index),
+          ...mediaList.slice(index + 1),
+        ];
+      } else {
+        updatedMediaList = [
+          ...mediaList.slice(0, index),
+          { ...oldItem, progress: newProgress },
+          ...mediaList.slice(index + 1),
+        ];
+      }
       this._currentWatching.next(updatedMediaList);
     } catch (err) {
       console.error(err);

@@ -4,7 +4,7 @@
     <button
       class="basic-button refresh-button"
       (click)="refresh()"
-      [disabled]="(isLoadingWatching | async) || (isLoadingPlanning | async)"
+      [disabled]="disableRefresh | async"
     >
       ⟳
     </button>
@@ -41,6 +41,7 @@
         [mediaList]="(airingMediaList | async) ?? []"
         (increaseEpisodeProgress)="increaseEpisodeProgress($event)"
         (decreaseEpisodeProgress)="decreaseEpisodeProgress($event)"
+        [disableEpisodeProgressChanges]="disableEpisodeProgressChanges"
       ></zjk-ani-watching-ui-media-list-display>
     </section>
     <section class="ani-watching-section">
@@ -49,6 +50,7 @@
         [mediaList]="(finishedAiringMediaList | async) ?? []"
         (increaseEpisodeProgress)="increaseEpisodeProgress($event)"
         (decreaseEpisodeProgress)="decreaseEpisodeProgress($event)"
+        [disableEpisodeProgressChanges]="disableEpisodeProgressChanges"
       ></zjk-ani-watching-ui-media-list-display>
     </section>
   </ng-container>

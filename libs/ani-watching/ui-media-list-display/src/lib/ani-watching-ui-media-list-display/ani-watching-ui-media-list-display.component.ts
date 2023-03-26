@@ -13,7 +13,12 @@ import { TimeUntilPipe } from './time-until.pipe';
 })
 export class AniWatchingUiMediaListDisplayComponent {
   @Input() mediaList: AniListMedia[] = [];
+  @Input() disableEpisodeProgressChanges = false;
 
   @Output() increaseEpisodeProgress = new EventEmitter<AniListMedia>();
   @Output() decreaseEpisodeProgress = new EventEmitter<AniListMedia>();
+
+  mediaListTrackBy(_index: number, item: AniListMedia) {
+    return item.mediaListId;
+  }
 }

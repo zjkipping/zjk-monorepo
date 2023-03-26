@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, combineLatest, filter, map } from 'rxjs';
 
 import { AniListMediaListService } from '@zjk/ani-list/data-access-media-list';
 import { AniListUserInfoService } from '@zjk/ani-list/data-access-user-info';
@@ -31,7 +31,8 @@ export class AniWatchingFeatureDashboardComponent {
   plannedNowAiringMediaList: Observable<AniListMedia[]>;
   hasPlannedMediaNowAiring: Observable<boolean>;
   isLoadingWatching: Observable<boolean>;
-  isLoadingPlanning: Observable<boolean>;
+  disableRefresh: Observable<boolean>;
+  disableEpisodeProgressChanges = false;
 
   constructor(
     private mediaListService: AniListMediaListService,
@@ -41,8 +42,17 @@ export class AniWatchingFeatureDashboardComponent {
     this.isLoadingWatching = mediaListService.currentlyWatching.pipe(
       map((mediaList) => !mediaList),
     );
-    this.isLoadingPlanning = mediaListService.planningToWatch.pipe(
+    const isLoadingPlanning = mediaListService.planningToWatch.pipe(
       map((mediaList) => !mediaList),
+    );
+    this.disableRefresh = combineLatest([
+      this.isLoadingWatching,
+      isLoadingPlanning,
+    ]).pipe(
+      map(
+        ([loadingWatching, loadingPlanning]) =>
+          loadingWatching || loadingPlanning,
+      ),
     );
 
     const loadedMediaList = mediaListService.currentlyWatching.pipe(
@@ -110,29 +120,31 @@ export class AniWatchingFeatureDashboardComponent {
   }
 
   refresh() {
-    this.mediaListService.refreshCurrentlyWatching();
-    this.mediaListService.refreshPlanningToWatch();
+    this.mediaListService.fetchCurrentWatching();
+    this.mediaListService.fetchPlanningToWatch();
   }
 
   async increaseEpisodeProgress(media: AniListMedia) {
     const newProgress = media.progress + 1;
     if (newProgress <= media.episodes) {
+      this.disableEpisodeProgressChanges = true;
       await this.mediaListService.updateEpisodeProgress(
         media.mediaListId,
         newProgress,
       );
-      this.mediaListService.silentRefreshCurrentlyWatching();
+      this.disableEpisodeProgressChanges = false;
     }
   }
 
   async decreaseEpisodeProgress(media: AniListMedia) {
     const newProgress = media.progress - 1;
     if (newProgress >= 0) {
+      this.disableEpisodeProgressChanges = true;
       await this.mediaListService.updateEpisodeProgress(
         media.mediaListId,
         newProgress,
       );
-      this.mediaListService.silentRefreshCurrentlyWatching();
+      this.disableEpisodeProgressChanges = false;
     }
   }
 }

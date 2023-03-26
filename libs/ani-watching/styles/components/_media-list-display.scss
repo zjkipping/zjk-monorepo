@@ -115,6 +115,11 @@ zjk-ani-watching-ui-media-list-display {
           color: $primary-accent;
           margin: 0 5px;
           line-height: 15px;
+
+          &:disabled {
+            color: $primary-accent-disabled;
+            cursor: not-allowed;
+          }
         }
 
         button.decrease-progress-button {

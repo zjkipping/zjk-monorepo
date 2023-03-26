@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  Observable,
-  Subject,
   expand,
   reduce,
-  shareReplay,
-  startWith,
-  switchMap,
   takeWhile,
   firstValueFrom,
-  of,
-  merge,
+  BehaviorSubject,
 } from 'rxjs';
 
 import { AniListGraphQLApiService } from '@zjk/ani-list/data-access-graphql-api';
@@ -27,63 +21,75 @@ import {
   providedIn: 'root',
 })
 export class AniListMediaListService {
-  currentlyWatching: Observable<AniListMedia[] | null>;
-  planningToWatch: Observable<AniListMedia[] | null>;
-
-  private _refreshCurrentlyWatching = new Subject<void>();
-  private _refreshPlanningToWatch = new Subject<void>();
-
-  private _silentRefreshCurrentlyWatching = new Subject<void>();
-  private _silentRefreshPlanningToWatch = new Subject<void>();
+  private _currentWatching = new BehaviorSubject<AniListMedia[] | null>(null);
+  private _planningToWatch = new BehaviorSubject<AniListMedia[] | null>(null);
+  currentlyWatching = this._currentWatching.asObservable();
+  planningToWatch = this._planningToWatch.asObservable();
 
   constructor(
     private aniListGraphQLApiService: AniListGraphQLApiService,
     private aniListUserInfoService: AniListUserInfoService,
   ) {
-    this.currentlyWatching = this.aniListUserInfoService.userInfo.pipe(
-      switchMap((userInfo) =>
-        this._refreshCurrentlyWatching.pipe(
-          startWith(null),
-          switchMap(() =>
-            merge(
-              of(null),
-              this._silentRefreshCurrentlyWatching.pipe(
-                startWith(null),
-                switchMap(() =>
-                  this.getAllMediaListPages(userInfo.id, [
-                    AniListMediaListStatus.CURRENT,
-                    AniListMediaListStatus.REPEATING,
-                  ]),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      shareReplay(1),
+    this.fetchCurrentWatching();
+    this.fetchPlanningToWatch();
+  }
+
+  public async fetchCurrentWatching() {
+    if (this._currentWatching.value !== null) {
+      this._currentWatching.next(null);
+    }
+
+    const userInfo = await firstValueFrom(this.aniListUserInfoService.userInfo);
+
+    const mediaList = await firstValueFrom(
+      this.getAllMediaListPages(userInfo.id, [
+        AniListMediaListStatus.CURRENT,
+        AniListMediaListStatus.REPEATING,
+      ]),
     );
 
-    this.planningToWatch = this.aniListUserInfoService.userInfo.pipe(
-      switchMap((userInfo) =>
-        this._refreshPlanningToWatch.pipe(
-          startWith(null),
-          switchMap(() =>
-            merge(
-              of(null),
-              this._silentRefreshPlanningToWatch.pipe(
-                startWith(null),
-                switchMap(() =>
-                  this.getAllMediaListPages(userInfo.id, [
-                    AniListMediaListStatus.PLANNING,
-                  ]),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      shareReplay(1),
+    this._currentWatching.next(mediaList);
+  }
+
+  public async fetchPlanningToWatch() {
+    if (this._planningToWatch.value !== null) {
+      this._planningToWatch.next(null);
+    }
+
+    const userInfo = await firstValueFrom(this.aniListUserInfoService.userInfo);
+
+    const mediaList = await firstValueFrom(
+      this.getAllMediaListPages(userInfo.id, [AniListMediaListStatus.PLANNING]),
     );
+
+    this._planningToWatch.next(mediaList);
+  }
+
+  async updateEpisodeProgress(mediaListId: number, newProgress: number) {
+    try {
+      await firstValueFrom(
+        this.aniListGraphQLApiService.sendQuery<void>(
+          updateEpisodeProgressQuery,
+          {
+            mediaListId,
+            progress: newProgress,
+          },
+        ),
+      );
+
+      const mediaList = this._currentWatching.value as AniListMedia[];
+      const index = mediaList.findIndex(
+        (mediaItem) => mediaItem.mediaListId === mediaListId,
+      );
+      const updatedMediaList: AniListMedia[] = [
+        ...mediaList.slice(0, index),
+        { ...mediaList[index], progress: newProgress },
+        ...mediaList.slice(index + 1),
+      ];
+      this._currentWatching.next(updatedMediaList);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   private getAllMediaListPages(
@@ -125,34 +131,6 @@ export class AniListMediaListService {
         userId,
         mediaListStatuses,
       },
-    );
-  }
-
-  refreshCurrentlyWatching() {
-    this._refreshCurrentlyWatching.next();
-  }
-
-  refreshPlanningToWatch() {
-    this._refreshPlanningToWatch.next();
-  }
-
-  silentRefreshCurrentlyWatching() {
-    this._silentRefreshCurrentlyWatching.next();
-  }
-
-  silentRefreshPlanningToWatch() {
-    this._silentRefreshPlanningToWatch.next();
-  }
-
-  async updateEpisodeProgress(mediaListId: number, newProgress: number) {
-    return firstValueFrom(
-      this.aniListGraphQLApiService.sendQuery<void>(
-        updateEpisodeProgressQuery,
-        {
-          mediaListId,
-          progress: newProgress,
-        },
-      ),
     );
   }
 }

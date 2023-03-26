@@ -24,6 +24,11 @@ nav.ani-watching-nav {
       font-size: 2rem;
       color: $primary-accent;
       font-weight: bold;
+
+      &:disabled {
+        color: $primary-accent-disabled;
+        cursor: not-allowed;
+      }
     }
   }
 

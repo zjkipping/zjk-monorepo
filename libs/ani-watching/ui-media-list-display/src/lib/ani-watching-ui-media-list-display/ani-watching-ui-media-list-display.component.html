@@ -1,7 +1,7 @@
 <div class="media-list-display">
   <div
     class="media-item"
-    *ngFor="let mediaItem of mediaList"
+    *ngFor="let mediaItem of mediaList; trackBy: mediaListTrackBy"
     [style.background-image]="'url(' + mediaItem.coverImage.large + ')'"
     [attr.title]="mediaItem.title.userPreferred"
   >
@@ -40,6 +40,7 @@
         <button
           class="basic-button decrease-progress-button"
           (click)="decreaseEpisodeProgress.emit(mediaItem)"
+          [disabled]="disableEpisodeProgressChanges"
         >
           -
         </button>
@@ -52,6 +53,7 @@
         <button
           class="basic-button increase-progress-button"
           (click)="increaseEpisodeProgress.emit(mediaItem)"
+          [disabled]="disableEpisodeProgressChanges"
         >
           +
         </button>

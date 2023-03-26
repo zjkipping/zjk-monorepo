@@ -1,6 +1,11 @@
-import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandlerFn,
+  HttpRequest,
+} from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 
 import { AniListAuthService } from '@zjk/ani-list/data-access-auth';
 
@@ -14,6 +19,13 @@ export function AniListAuthHttpInterceptor(
     return next(
       req.clone({
         headers: req.headers.set('Authorization', `Bearer ${accessToken}`),
+      }),
+    ).pipe(
+      catchError((err: any) => {
+        if (err instanceof HttpErrorResponse && err.status === 401) {
+          aniListAuthService.login();
+        }
+        return of(err);
       }),
     );
   } else {

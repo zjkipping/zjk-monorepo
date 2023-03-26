@@ -6,6 +6,9 @@ name: Deploy to Firebase Hosting on merge
   push:
     branches:
       - main
+
+concurrency: deploy_firebase_apps_from_main
+
 jobs:
   get_affected_apps:
     runs-on: ubuntu-latest

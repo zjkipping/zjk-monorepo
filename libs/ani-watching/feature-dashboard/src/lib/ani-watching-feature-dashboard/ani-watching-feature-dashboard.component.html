@@ -28,7 +28,7 @@
   >
     <section class="ani-watching-section">
       <div class="section-header">
-        <h2>Currently Airing</h2>
+        <h2>Currently Airing ({{ (airingMediaList | async)?.length ?? 0 }})</h2>
         <a
           class="airing-planned-shows"
           *ngIf="hasPlannedMediaNowAiring | async"
@@ -38,20 +38,36 @@
         </a>
       </div>
       <zjk-ani-watching-ui-media-list-display
+        *ngIf="displayAiringMediaList | async; else noAiringShows"
         [mediaList]="(airingMediaList | async) ?? []"
         (increaseEpisodeProgress)="increaseEpisodeProgress($event)"
         (decreaseEpisodeProgress)="decreaseEpisodeProgress($event)"
         [disableEpisodeProgressChanges]="disableEpisodeProgressChanges"
       ></zjk-ani-watching-ui-media-list-display>
+      <ng-template #noAiringShows>
+        <p>No Currently Airing Shows In Your "Watching" List</p>
+      </ng-template>
     </section>
-    <section class="ani-watching-section">
-      <h2>Finished Airing</h2>
+    <section
+      class="ani-watching-section"
+      *ngIf="displayFinishedAiringMediaList | async"
+    >
+      <h2>
+        Finished Airing ({{ (finishedAiringMediaList | async)?.length ?? 0 }})
+      </h2>
       <zjk-ani-watching-ui-media-list-display
+        *ngIf="
+          displayFinishedAiringMediaList | async;
+          else noFinishedAiringShows
+        "
         [mediaList]="(finishedAiringMediaList | async) ?? []"
         (increaseEpisodeProgress)="increaseEpisodeProgress($event)"
         (decreaseEpisodeProgress)="decreaseEpisodeProgress($event)"
         [disableEpisodeProgressChanges]="disableEpisodeProgressChanges"
       ></zjk-ani-watching-ui-media-list-display>
+      <ng-template #noFinishedAiringShows>
+        <p>No Finished Airing Shows In Your "Watching" List</p>
+      </ng-template>
     </section>
   </ng-container>
   <ng-template #loadingSpinner>

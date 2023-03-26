@@ -27,7 +27,9 @@ import { AniWatchingUiMediaListDisplayComponent } from '@zjk/ani-watching/ui-med
 export class AniWatchingFeatureDashboardComponent {
   userInfo: Observable<AniListUserInfo>;
   airingMediaList: Observable<AniListMedia[]>;
+  displayAiringMediaList: Observable<boolean>;
   finishedAiringMediaList: Observable<AniListMedia[]>;
+  displayFinishedAiringMediaList: Observable<boolean>;
   plannedNowAiringMediaList: Observable<AniListMedia[]>;
   hasPlannedMediaNowAiring: Observable<boolean>;
   isLoadingWatching: Observable<boolean>;
@@ -59,49 +61,65 @@ export class AniWatchingFeatureDashboardComponent {
       filter((mediaList): mediaList is AniListMedia[] => !!mediaList),
     );
 
-    this.airingMediaList = loadedMediaList.pipe(
+    const airingFilteredList = loadedMediaList.pipe(
       map((mediaList) =>
-        mediaList
-          .filter(
-            (mediaItem) => mediaItem.status === AniListMediaStatus.RELEASING,
-          )
-          .sort((a, b) => {
-            const aTime = a.nextAiringEpisode?.timeUntilAiring as number;
-            const bTime = b.nextAiringEpisode?.timeUntilAiring as number;
-            if (aTime > bTime) {
-              return 1;
-            } else if (aTime < bTime) {
-              return -1;
-            } else {
-              return 0;
-            }
-          }),
+        mediaList.filter(
+          (mediaItem) => mediaItem.status === AniListMediaStatus.RELEASING,
+        ),
       ),
     );
 
-    this.finishedAiringMediaList = loadedMediaList.pipe(
+    this.displayAiringMediaList = airingFilteredList.pipe(
+      map((mediaList) => mediaList.length > 0),
+    );
+
+    this.airingMediaList = airingFilteredList.pipe(
       map((mediaList) =>
-        mediaList
-          .filter(
-            (mediaItem) => mediaItem.status === AniListMediaStatus.FINISHED,
-          )
-          .sort((a, b) => {
-            const aDate = new Date();
-            aDate.setFullYear(a.endDate.year);
-            aDate.setMonth(a.endDate.month - 1);
-            aDate.setDate(a.endDate.day);
-            const bDate = new Date();
-            bDate.setFullYear(b.endDate.year);
-            bDate.setMonth(b.endDate.month - 1);
-            bDate.setDate(b.endDate.day);
-            if (aDate > bDate) {
-              return -1;
-            } else if (aDate < bDate) {
-              return 1;
-            } else {
-              return 0;
-            }
-          }),
+        mediaList.sort((a, b) => {
+          const aTime = a.nextAiringEpisode?.timeUntilAiring as number;
+          const bTime = b.nextAiringEpisode?.timeUntilAiring as number;
+          if (aTime > bTime) {
+            return 1;
+          } else if (aTime < bTime) {
+            return -1;
+          } else {
+            return 0;
+          }
+        }),
+      ),
+    );
+
+    const finishedAiringFilteredList = loadedMediaList.pipe(
+      map((mediaList) =>
+        mediaList.filter(
+          (mediaItem) => mediaItem.status === AniListMediaStatus.FINISHED,
+        ),
+      ),
+    );
+
+    this.displayFinishedAiringMediaList = finishedAiringFilteredList.pipe(
+      map((mediaList) => mediaList.length > 0),
+    );
+
+    this.finishedAiringMediaList = finishedAiringFilteredList.pipe(
+      map((mediaList) =>
+        mediaList.sort((a, b) => {
+          const aDate = new Date();
+          aDate.setFullYear(a.endDate.year);
+          aDate.setMonth(a.endDate.month - 1);
+          aDate.setDate(a.endDate.day);
+          const bDate = new Date();
+          bDate.setFullYear(b.endDate.year);
+          bDate.setMonth(b.endDate.month - 1);
+          bDate.setDate(b.endDate.day);
+          if (aDate > bDate) {
+            return -1;
+          } else if (aDate < bDate) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }),
       ),
     );
 

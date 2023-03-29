@@ -2,15 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Observable, combineLatest, filter, map } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 
 import { AniListMediaListService } from '@zjk/ani-list/data-access-media-list';
-import { AniListUserInfoService } from '@zjk/ani-list/data-access-user-info';
-import {
-  AniListUserInfo,
-  AniListMedia,
-  AniListMediaStatus,
-} from '@zjk/ani-list/util-types';
+import { AniListMedia, AniListMediaStatus } from '@zjk/ani-list/util-types';
 import { AniWatchingUiMediaListDisplayComponent } from '@zjk/ani-watching/ui-media-list-display';
 
 @Component({
@@ -25,36 +20,18 @@ import { AniWatchingUiMediaListDisplayComponent } from '@zjk/ani-watching/ui-med
   templateUrl: './ani-watching-feature-dashboard.component.html',
 })
 export class AniWatchingFeatureDashboardComponent {
-  userInfo: Observable<AniListUserInfo>;
   airingMediaList: Observable<AniListMedia[]>;
+  isLoadingWatching: Observable<boolean>;
   displayAiringMediaList: Observable<boolean>;
   finishedAiringMediaList: Observable<AniListMedia[]>;
   displayFinishedAiringMediaList: Observable<boolean>;
   plannedNowAiringMediaList: Observable<AniListMedia[]>;
   hasPlannedMediaNowAiring: Observable<boolean>;
-  isLoadingWatching: Observable<boolean>;
-  disableRefresh: Observable<boolean>;
   disableEpisodeProgressChanges = false;
 
-  constructor(
-    private mediaListService: AniListMediaListService,
-    userInfoService: AniListUserInfoService,
-  ) {
-    this.userInfo = userInfoService.userInfo;
+  constructor(private mediaListService: AniListMediaListService) {
     this.isLoadingWatching = mediaListService.currentlyWatching.pipe(
       map((mediaList) => !mediaList),
-    );
-    const isLoadingPlanning = mediaListService.planningToWatch.pipe(
-      map((mediaList) => !mediaList),
-    );
-    this.disableRefresh = combineLatest([
-      this.isLoadingWatching,
-      isLoadingPlanning,
-    ]).pipe(
-      map(
-        ([loadingWatching, loadingPlanning]) =>
-          loadingWatching || loadingPlanning,
-      ),
     );
 
     const loadedMediaList = mediaListService.currentlyWatching.pipe(
@@ -135,11 +112,6 @@ export class AniWatchingFeatureDashboardComponent {
     this.hasPlannedMediaNowAiring = this.plannedNowAiringMediaList.pipe(
       map((mediaList) => mediaList.length > 0),
     );
-  }
-
-  refresh() {
-    this.mediaListService.fetchCurrentWatching();
-    this.mediaListService.fetchPlanningToWatch();
   }
 
   async increaseEpisodeProgress(media: AniListMedia) {

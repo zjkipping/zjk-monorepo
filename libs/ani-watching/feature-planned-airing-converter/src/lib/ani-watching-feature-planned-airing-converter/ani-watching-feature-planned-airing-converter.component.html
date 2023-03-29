@@ -1,0 +1,49 @@
+<a class="back-to-watching-link" routerLink="/">
+  🡰 Go Back To Currently Watching
+</a>
+<div class="content" [class.not-loading]="(isLoading | async) === false">
+  <ng-container *ngIf="(isLoading | async) === false; else loadingSpinner">
+    <section class="media-list-section">
+      <div>
+        <h2>
+          Planned Shows Currently Airing ({{
+            (plannedNowAiringMediaList | async)?.length ?? 0
+          }})
+        </h2>
+      </div>
+      <div class="action-toolbar">
+        <button
+          [disabled]="disableSubmit"
+          (click)="convertSelectedToWatching()"
+        >
+          Convert Selected To Watching
+        </button>
+      </div>
+      <div class="media-list-display">
+        <div
+          class="selectable-media-item"
+          [class.selected]="isSelected(mediaItem.mediaListId)"
+          (click)="selectMedia(mediaItem)"
+          *ngFor="
+            let mediaItem of plannedNowAiringMediaList | async;
+            trackBy: mediaListTrackBy
+          "
+        >
+          <div
+            class="media-item"
+            [style.background-image]="'url(' + mediaItem.coverImage.large + ')'"
+            [attr.title]="mediaItem.title.userPreferred"
+          ></div>
+          <a [href]="mediaItem.siteUrl" target="_blank">
+            {{ mediaItem.title.userPreferred }}
+          </a>
+        </div>
+      </div>
+    </section>
+  </ng-container>
+  <ng-template #loadingSpinner>
+    <div class="loading-spinner-container">
+      <div class="loading-spinner"></div>
+    </div>
+  </ng-template>
+</div>

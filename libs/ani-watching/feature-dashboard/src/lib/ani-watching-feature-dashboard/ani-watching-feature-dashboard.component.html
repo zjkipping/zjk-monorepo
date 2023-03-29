@@ -1,38 +1,17 @@
-<nav class="ani-watching-nav">
-  <div class="nav-header">
-    <h1>AniWatching</h1>
-    <button
-      class="basic-button refresh-button"
-      (click)="refresh()"
-      [disabled]="disableRefresh | async"
-    >
-      ⟳
-    </button>
-  </div>
-  <a
-    *ngIf="userInfo | async as user"
-    class="nav-user-display"
-    [href]="user.siteUrl"
-    target="_blank"
-  >
-    <span class="user-name">{{ user.name }}</span>
-    <img class="user-avatar" [src]="user.avatar.large" alt="user's avatar" />
-  </a>
-</nav>
-<main
-  class="ani-watching-main-content"
+<div
+  class="content"
   [class.not-loading]="(isLoadingWatching | async) === false"
 >
   <ng-container
     *ngIf="(isLoadingWatching | async) === false; else loadingSpinner"
   >
-    <section class="ani-watching-section">
+    <section class="media-list-section">
       <div class="section-header">
         <h2>Currently Airing ({{ (airingMediaList | async)?.length ?? 0 }})</h2>
         <a
           class="airing-planned-shows"
           *ngIf="hasPlannedMediaNowAiring | async"
-          routerLink="airing-planned-shows"
+          routerLink="planned-airing-converter"
         >
           !
         </a>
@@ -49,7 +28,7 @@
       </ng-template>
     </section>
     <section
-      class="ani-watching-section"
+      class="media-list-section"
       *ngIf="displayFinishedAiringMediaList | async"
     >
       <h2>
@@ -75,4 +54,4 @@
       <div class="loading-spinner"></div>
     </div>
   </ng-template>
-</main>
+</div>

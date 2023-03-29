@@ -15,9 +15,14 @@ nav.ani-watching-nav {
     place-items: center;
     column-gap: 0.25rem;
 
-    h1 {
-      margin: 0;
-      text-align: end;
+    a {
+      text-decoration: none;
+      color: white;
+
+      h1 {
+        margin: 0;
+        text-align: end;
+      }
     }
 
     button.refresh-button {

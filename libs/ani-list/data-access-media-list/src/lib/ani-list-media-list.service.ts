@@ -15,6 +15,7 @@ import {
   PaginatedMediaListQuery,
   paginatedMediaListQuery,
   updateEpisodeProgressQuery,
+  updateStatusQuery,
 } from './graphql-queries';
 
 @Injectable({
@@ -96,6 +97,35 @@ export class AniListMediaListService {
         ];
       }
       this._currentWatching.next(updatedMediaList);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async convertToWatching(mediaItems: AniListMedia[]) {
+    const ids = mediaItems.map((mediaItem) => mediaItem.mediaListId);
+    try {
+      await firstValueFrom(
+        this.aniListGraphQLApiService.sendQuery<void>(updateStatusQuery, {
+          mediaListIds: ids,
+        }),
+      );
+
+      const currentlyWatchingList = this._currentWatching
+        .value as AniListMedia[];
+
+      this._currentWatching.next([...currentlyWatchingList, ...mediaItems]);
+
+      const planningToWatchList = this._planningToWatch.value as AniListMedia[];
+      this._planningToWatch.next([
+        ...planningToWatchList.filter(
+          (planningMediaItem) =>
+            !mediaItems.find(
+              (mediaItem) =>
+                mediaItem.mediaListId === planningMediaItem.mediaListId,
+            ),
+        ),
+      ]);
     } catch (err) {
       console.error(err);
     }

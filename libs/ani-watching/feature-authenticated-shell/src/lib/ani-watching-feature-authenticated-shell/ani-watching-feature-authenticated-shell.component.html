@@ -1,0 +1,8 @@
+<zjk-ani-watching-ui-navbar
+  [userInfo]="(userInfo | async) ?? undefined"
+  [disableRefreshButton]="(disableRefresh | async) ?? true"
+  (refreshClicked)="refresh()"
+></zjk-ani-watching-ui-navbar>
+<main class="authenticated-shell-outlet">
+  <router-outlet></router-outlet>
+</main>

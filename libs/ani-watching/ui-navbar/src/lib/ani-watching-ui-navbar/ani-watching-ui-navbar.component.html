@@ -1,0 +1,26 @@
+<nav class="ani-watching-nav">
+  <div class="nav-header">
+    <a routerLink="/"><h1>AniWatching</h1></a>
+
+    <button
+      class="basic-button refresh-button"
+      (click)="refreshClicked.emit()"
+      [disabled]="disableRefreshButton"
+    >
+      ⟳
+    </button>
+  </div>
+  <a
+    *ngIf="userInfo"
+    class="nav-user-display"
+    [href]="userInfo.siteUrl"
+    target="_blank"
+  >
+    <span class="user-name">{{ userInfo.name }}</span>
+    <img
+      class="user-avatar"
+      [src]="userInfo.avatar.large"
+      alt="user's avatar"
+    />
+  </a>
+</nav>

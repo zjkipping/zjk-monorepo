@@ -43,11 +43,20 @@
       "@zjk/ani-watching/feature-app": [
         "libs/ani-watching/feature-app/src/index.ts"
       ],
+      "@zjk/ani-watching/feature-authenticated-shell": [
+        "libs/ani-watching/feature-authenticated-shell/src/index.ts"
+      ],
       "@zjk/ani-watching/feature-dashboard": [
         "libs/ani-watching/feature-dashboard/src/index.ts"
       ],
+      "@zjk/ani-watching/feature-planned-airing-converter": [
+        "libs/ani-watching/feature-planned-airing-converter/src/index.ts"
+      ],
       "@zjk/ani-watching/ui-media-list-display": [
         "libs/ani-watching/ui-media-list-display/src/index.ts"
+      ],
+      "@zjk/ani-watching/ui-navbar": [
+        "libs/ani-watching/ui-navbar/src/index.ts"
       ],
       "@zjk/infrastructure/util-environment": [
         "libs/infrastructure/util-environment/src/index.ts"

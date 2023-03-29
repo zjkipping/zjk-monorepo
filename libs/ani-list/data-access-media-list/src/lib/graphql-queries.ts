@@ -64,3 +64,11 @@ mutation ($mediaListId: Int, $progress: Int) {
   }
 }
 `;
+
+export const updateStatusQuery = `
+mutation ($mediaListIds: [Int]) {
+  UpdateMediaListEntries (ids: $mediaListIds, status: CURRENT) {
+    id
+  }
+}
+`;

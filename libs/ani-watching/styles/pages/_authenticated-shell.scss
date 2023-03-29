@@ -1,0 +1,12 @@
+zjk-ani-watching-feature-authenticated-shell {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-rows: max-content 1fr;
+
+  main.authenticated-shell-outlet {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 0 1fr;
+  }
+}

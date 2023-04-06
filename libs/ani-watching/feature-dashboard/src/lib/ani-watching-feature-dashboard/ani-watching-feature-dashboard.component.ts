@@ -116,7 +116,11 @@ export class AniWatchingFeatureDashboardComponent {
 
   async increaseEpisodeProgress(media: AniListMedia) {
     const newProgress = media.progress + 1;
-    if (newProgress <= media.episodes) {
+    if (
+      (media.episodes && media.episodes >= newProgress) ||
+      (media.nextAiringEpisode &&
+        media.nextAiringEpisode.episode - 1 >= newProgress)
+    ) {
       this.disableEpisodeProgressChanges = true;
       await this.mediaListService.updateEpisodeProgress(
         media.mediaListId,

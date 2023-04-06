@@ -25,11 +25,10 @@ zjk-ani-watching-ui-media-list-display {
         top: 0;
         left: 0;
         display: flex;
+        flex-wrap: wrap;
         border-top-left-radius: 4px;
         overflow: hidden;
-        -webkit-box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.75);
-        box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.75);
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.75));
 
         a.streaming-link {
           text-decoration: none;

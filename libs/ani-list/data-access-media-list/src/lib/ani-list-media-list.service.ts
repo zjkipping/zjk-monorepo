@@ -11,6 +11,14 @@ import { AniListGraphQLApiService } from '@zjk/ani-list/data-access-graphql-api'
 import { AniListUserInfoService } from '@zjk/ani-list/data-access-user-info';
 import { AniListMedia, AniListMediaListStatus } from '@zjk/ani-list/util-types';
 
+const supportedExternalLinkSites = [
+  'crunchyroll',
+  'hidive',
+  'netflix',
+  'disney',
+  'hulu',
+];
+
 import {
   PaginatedMediaListQuery,
   paginatedMediaListQuery,
@@ -151,6 +159,12 @@ export class AniListMediaListService {
             mediaListId: mediaListItem.id,
             progress: mediaListItem.progress,
             ...mediaListItem.media,
+            externalLinks: mediaListItem.media.externalLinks.filter((link) => {
+              const site = link.site.toLowerCase();
+              return supportedExternalLinkSites.some((supportedSite) =>
+                site.includes(supportedSite),
+              );
+            }),
           })),
         ],
         [] as AniListMedia[],

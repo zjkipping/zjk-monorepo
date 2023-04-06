@@ -21,7 +21,7 @@ export interface AniListRawMedia {
     userPreferred: string;
   };
   status: AniListMediaStatus;
-  episodes: number;
+  episodes?: number;
   coverImage: {
     large: string;
   };

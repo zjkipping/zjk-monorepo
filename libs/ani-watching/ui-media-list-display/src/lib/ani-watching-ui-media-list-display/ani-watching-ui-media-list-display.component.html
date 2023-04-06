@@ -16,21 +16,15 @@
       {{ mediaItem.nextAiringEpisode.episode - 1 - mediaItem.progress }}
     </div>
     <div class="streaming-links">
-      <ng-container *ngFor="let streamingLink of mediaItem.externalLinks">
-        <a
-          *ngIf="
-            streamingLink.site.toLowerCase().includes('crunchyroll') ||
-            streamingLink.site.toLowerCase().includes('hidive') ||
-            streamingLink.site.toLowerCase().includes('netflix')
-          "
-          [href]="streamingLink.url"
-          target="_blank"
-          class="streaming-link"
-          [style.background]="streamingLink.color"
-        >
-          <img class="streaming-link-icon" [src]="streamingLink.icon" />
-        </a>
-      </ng-container>
+      <a
+        *ngFor="let streamingLink of mediaItem.externalLinks"
+        [href]="streamingLink.url"
+        target="_blank"
+        class="streaming-link"
+        [style.background]="streamingLink.color"
+      >
+        <img class="streaming-link-icon" [src]="streamingLink.icon" />
+      </a>
     </div>
     <div class="media-info">
       <div class="next-episode" *ngIf="mediaItem.nextAiringEpisode">
@@ -47,7 +41,7 @@
         <div class="episode-display">
           <span>{{ mediaItem.progress }}</span>
           <span class="progress-episode-separator">/</span>
-          <span>{{ mediaItem.episodes }}</span>
+          <span>{{ mediaItem.episodes ?? '~' }}</span>
         </div>
 
         <button

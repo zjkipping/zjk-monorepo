@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Observable, filter, map } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, map } from 'rxjs';
 
 import { AniListMediaListService } from '@zjk/ani-list/data-access-media-list';
 import { AniListMedia, AniListMediaStatus } from '@zjk/ani-list/util-types';
+
+const localStorageIgnoredMediaIdsKey = 'ignored-media-ids';
 
 @Component({
   selector: 'zjk-ani-watching-feature-planned-airing-converter',
@@ -18,17 +20,34 @@ export class AniWatchingFeaturePlannedAiringConverterComponent {
   isLoading: Observable<boolean>;
   selectedMediaListitems: AniListMedia[] = [];
   disableSubmit = false;
+  ignoredMediaIds = new BehaviorSubject<number[]>(
+    JSON.parse(localStorage.getItem(localStorageIgnoredMediaIdsKey) ?? '[]'),
+  );
 
   constructor(private mediaListService: AniListMediaListService) {
     this.isLoading = mediaListService.planningToWatch.pipe(
       map((mediaList) => !mediaList),
     );
 
-    this.plannedNowAiringMediaList = mediaListService.planningToWatch.pipe(
+    const rawPlannedAiringList = mediaListService.planningToWatch.pipe(
       filter((mediaList): mediaList is AniListMedia[] => !!mediaList),
       map((mediaList) =>
         mediaList.filter(
           (mediaItem) => mediaItem.status === AniListMediaStatus.RELEASING,
+        ),
+      ),
+    );
+
+    this.plannedNowAiringMediaList = combineLatest([
+      rawPlannedAiringList,
+      this.ignoredMediaIds,
+    ]).pipe(
+      map(([mediaList, ignoredIds]) =>
+        mediaList.filter(
+          (mediaItem) =>
+            !ignoredIds.some(
+              (ignoredId) => ignoredId === mediaItem.mediaListId,
+            ),
         ),
       ),
     );
@@ -56,6 +75,17 @@ export class AniWatchingFeaturePlannedAiringConverterComponent {
     return !!this.selectedMediaListitems.find(
       (mediaItem) => mediaItem.mediaListId === id,
     );
+  }
+
+  async ignoreSelected() {
+    const ignoredIds = this.selectedMediaListitems.map(
+      (mediaItem) => mediaItem.mediaListId,
+    );
+    localStorage.setItem(
+      localStorageIgnoredMediaIdsKey,
+      JSON.stringify(ignoredIds),
+    );
+    this.ignoredMediaIds.next(ignoredIds);
   }
 
   async convertSelectedToWatching() {

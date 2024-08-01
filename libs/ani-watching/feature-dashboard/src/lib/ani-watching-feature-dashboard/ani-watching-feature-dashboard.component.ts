@@ -8,6 +8,8 @@ import { AniListMediaListService } from '@zjk/ani-list/data-access-media-list';
 import { AniListMedia, AniListMediaStatus } from '@zjk/ani-list/util-types';
 import { AniWatchingUiMediaListDisplayComponent } from '@zjk/ani-watching/ui-media-list-display';
 
+const localStorageIgnoredMediaIdsKey = 'ignored-media-ids';
+
 @Component({
   selector: 'zjk-ani-watching-feature-dashboard',
   standalone: true,
@@ -55,6 +57,12 @@ export class AniWatchingFeatureDashboardComponent {
         mediaList.sort((a, b) => {
           const aTime = a.nextAiringEpisode?.timeUntilAiring as number;
           const bTime = b.nextAiringEpisode?.timeUntilAiring as number;
+          if (!aTime) {
+            return 1;
+          }
+          if (!bTime) {
+            return -1;
+          }
           if (aTime > bTime) {
             return 1;
           } else if (aTime < bTime) {
@@ -110,6 +118,19 @@ export class AniWatchingFeatureDashboardComponent {
     );
 
     this.hasPlannedMediaNowAiring = this.plannedNowAiringMediaList.pipe(
+      map((mediaList) => {
+        const ignoredIds: number[] = JSON.parse(
+          localStorage.getItem(localStorageIgnoredMediaIdsKey) ?? '[]',
+        );
+        const filtered = mediaList.filter(
+          (mediaItem) =>
+            !ignoredIds.some(
+              (ignoredId) => ignoredId === mediaItem.mediaListId,
+            ),
+        );
+        console.log({ ignoredIds, mediaList, filtered });
+        return filtered;
+      }),
       map((mediaList) => mediaList.length > 0),
     );
   }

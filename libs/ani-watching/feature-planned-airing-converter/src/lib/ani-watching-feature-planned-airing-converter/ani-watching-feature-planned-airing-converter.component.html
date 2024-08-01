@@ -13,10 +13,18 @@
       </div>
       <div class="action-toolbar">
         <button
+          class="convert-selected-button"
           [disabled]="disableSubmit"
           (click)="convertSelectedToWatching()"
         >
           Convert Selected To Watching
+        </button>
+        <button
+          class="ignore-selected-button"
+          [disabled]="disableSubmit"
+          (click)="ignoreSelected()"
+        >
+          Ignore Selected
         </button>
       </div>
       <div class="media-list-display">

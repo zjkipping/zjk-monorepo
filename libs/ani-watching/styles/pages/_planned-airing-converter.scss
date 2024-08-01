@@ -29,8 +29,19 @@ zjk-ani-watching-feature-planned-airing-converter {
     button {
       font-size: 1rem;
       background-color: transparent;
-      border: 2px solid $primary-accent;
       padding: 0.5rem;
+
+      &.convert-selected-button {
+        border: 2px solid $primary-accent;
+      }
+
+      &.ignore-selected-button {
+        border: 2px solid $error;
+      }
+
+      &:first-child {
+        margin-bottom: 10px;
+      }
 
       &:disabled {
         border: 2px solid $primary-accent-disabled;

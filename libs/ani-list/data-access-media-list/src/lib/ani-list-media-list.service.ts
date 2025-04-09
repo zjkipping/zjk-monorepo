@@ -17,6 +17,7 @@ const supportedExternalLinkSites = [
   'netflix',
   'disney',
   'hulu',
+  'amazon',
 ];
 
 import {
